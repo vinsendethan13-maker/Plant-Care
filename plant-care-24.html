@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plant Care — Your Digital Garden</title>
+<style>
+:root{
+  --bg:#f6fbf5;--surface:#fff;--surface2:#eef7ed;--text:#173322;--muted:#6d7e73;
+  --primary:#4e9b62;--primary2:#2f7745;--accent:#dff3d8;--cream:#fff8e9;--pink:#f7dce5;
+  --warning:#e6a83b;--danger:#d96b62;--shadow:0 14px 35px rgba(34,82,49,.10);
+  --radius:24px;
+}
+[data-theme="dark"]{
+  --bg:#101a14;--surface:#17231b;--surface2:#203127;--text:#edf8ef;--muted:#a8b8ad;
+  --primary:#78c78b;--primary2:#9ce0a8;--accent:#24412d;--cream:#39311f;--pink:#432b36;
+  --shadow:0 14px 35px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+button,input,select,textarea{font:inherit} button{cursor:pointer;border:0}
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--surface) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid color-mix(in srgb,var(--text) 8%,transparent)}
+.nav-inner{max-width:1200px;margin:auto;padding:13px 20px;display:flex;align-items:center;gap:18px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:900;color:var(--text);text-decoration:none;white-space:nowrap}.logo-icon{font-size:25px}
+.nav-links{display:flex;gap:5px;align-items:center;flex:1;justify-content:center}.nav-links a{color:var(--muted);text-decoration:none;padding:9px 10px;border-radius:12px;font-size:13px;font-weight:700}.nav-links a:hover{background:var(--accent);color:var(--primary2)}
+.theme-btn,.menu-btn{background:var(--surface2);color:var(--text);width:42px;height:42px;border-radius:14px}.menu-btn{display:none}
+main{max-width:1200px;margin:auto;padding:0 20px 60px}
+.hero{min-height:560px;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:30px;padding:65px 0 45px;overflow:hidden}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;background:var(--accent);padding:8px 13px;border-radius:999px;color:var(--primary2);font-weight:800;font-size:13px}
+h1{font-size:clamp(42px,6vw,76px);line-height:1.02;margin:18px 0 20px;letter-spacing:-3px}
+.hero p{font-size:18px;color:var(--muted);max-width:650px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}
+.btn{padding:13px 18px;border-radius:15px;font-weight:850;transition:.2s transform,.2s box-shadow,.2s background}.btn:hover{transform:translateY(-3px);box-shadow:0 9px 20px rgba(40,100,53,.15)}.btn.primary{background:var(--primary);color:white}.btn.secondary{background:var(--surface);color:var(--primary2);border:1px solid color-mix(in srgb,var(--primary) 25%,transparent)}
+.hero-stats{display:flex;gap:12px;flex-wrap:wrap}.stat{background:var(--surface);box-shadow:var(--shadow);padding:12px 15px;border-radius:16px;min-width:135px}.stat b{display:block;font-size:21px}.stat span{color:var(--muted);font-size:12px}
+.plant-art{min-height:420px;border-radius:40px;background:linear-gradient(145deg,var(--accent),var(--cream));display:grid;place-items:center;position:relative;box-shadow:var(--shadow);overflow:hidden}
+.sun{position:absolute;right:14%;top:12%;font-size:55px;animation:float 4s ease-in-out infinite}.cloud{position:absolute;left:10%;top:17%;font-size:38px;opacity:.7}
+.pot{font-size:160px;filter:drop-shadow(0 18px 12px rgba(0,0,0,.13));animation:float 4.5s ease-in-out infinite}.leaf{position:absolute;font-size:55px;animation:sway 3.2s ease-in-out infinite}.l1{top:29%;left:37%}.l2{top:23%;right:30%;animation-delay:.6s}.l3{top:39%;right:22%;animation-delay:1.1s}
+@keyframes float{50%{transform:translateY(-10px)}}@keyframes sway{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(8deg) translateY(-5px)}}
+.section{padding:55px 0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:24px}.section-head h2{margin:0;font-size:32px;letter-spacing:-1px}.section-head p{margin:6px 0 0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:var(--surface);border:1px solid color-mix(in srgb,var(--text) 7%,transparent);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);transition:.22s transform}.card:hover{transform:translateY(-4px)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.input,.select,.textarea{background:var(--surface);border:1px solid color-mix(in srgb,var(--text) 12%,transparent);color:var(--text);border-radius:13px;padding:11px 13px;outline:none;width:100%}.input:focus,.select:focus,.textarea:focus{border-color:var(--primary)}.search{max-width:350px}
+.plant-card{position:relative}.plant-emoji{font-size:58px;background:var(--surface2);border-radius:20px;padding:12px;text-align:center}.plant-card h3{margin:14px 0 4px}.meta{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.tag{background:var(--accent);color:var(--primary2);padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800}.health{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}.bar{height:9px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:7px 0 14px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),#a5db9b);border-radius:inherit;transition:.5s}
+.card-actions{display:flex;gap:8px}.small{padding:9px 11px;border-radius:11px;font-size:12px;font-weight:800;background:var(--surface2);color:var(--text)}.small.green{background:var(--primary);color:#fff}
+.empty{grid-column:1/-1;text-align:center;padding:45px}.empty .big{font-size:55px}
+.feature-icon{font-size:34px}.card h3{margin:8px 0}.muted{color:var(--muted);font-size:14px}
+.choice-row{display:flex;gap:9px;flex-wrap:wrap}.choice{padding:10px 13px;border-radius:12px;background:var(--surface2);color:var(--text);font-weight:750}.choice.active{background:var(--primary);color:white}
+.result{margin-top:16px;padding:16px;border-radius:17px;background:var(--accent);display:none}.result.show{display:block;animation:pop .35s ease}@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.check-q{padding:15px 0;border-bottom:1px solid color-mix(in srgb,var(--text) 8%,transparent)}.check-q:last-child{border:0}
+.sun-display{text-align:center;font-size:80px;padding:15px}.sun-display.low{filter:grayscale(1);opacity:.55}.sun-display.medium{filter:saturate(.8)}.sun-display.bright{filter:saturate(1.5);text-shadow:0 0 22px #ffd45c}
+.library-grid{grid-template-columns:repeat(4,1fr)}.library-card{cursor:pointer}.library-card .plant-emoji{font-size:48px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day{min-height:82px;background:var(--surface2);border-radius:12px;padding:8px;font-size:11px}.day b{font-size:13px}.task{display:block;margin-top:5px;padding:4px 5px;border-radius:7px;background:var(--surface);font-size:10px;cursor:pointer}.task.done{text-decoration:line-through;opacity:.55}.today{outline:2px solid var(--primary)}
+.timeline{display:flex;gap:7px;overflow:auto;padding-bottom:8px}.timeline button{white-space:nowrap;background:var(--surface2);color:var(--text);padding:9px 12px;border-radius:12px}.timeline button.active{background:var(--primary);color:#fff}
+canvas{width:100%;height:230px;background:var(--surface2);border-radius:18px}
+.xp-box{display:grid;grid-template-columns:100px 1fr;gap:18px;align-items:center}.level-badge{width:95px;height:95px;border-radius:50%;display:grid;place-items:center;background:var(--accent);font-size:45px}.xp-big{font-size:28px;font-weight:900}.badges{display:flex;gap:10px;flex-wrap:wrap}.badge{padding:10px 12px;border-radius:14px;background:var(--surface2);font-size:12px;font-weight:800}.badge.locked{opacity:.35;filter:grayscale(1)}
+.challenge{background:linear-gradient(135deg,var(--accent),var(--pink));position:relative;overflow:hidden}.challenge:after{content:"🌿";position:absolute;font-size:110px;right:18px;bottom:-25px;opacity:.25}
+.quiz-option{width:100%;text-align:left;margin:7px 0;background:var(--surface2);color:var(--text);padding:12px;border-radius:12px;font-weight:700}.quiz-option:hover{background:var(--accent)}
+.tip{cursor:pointer}.tip-detail{display:none;margin-top:8px;color:var(--muted);font-size:13px}.tip.open .tip-detail{display:block;animation:fade .25s}.assistant{display:flex;flex-direction:column;gap:10px}.bubble{max-width:90%;padding:12px 14px;border-radius:15px;background:var(--surface2);font-size:13px}.bubble.bot{align-self:flex-start}.bubble.user{align-self:flex-end;background:var(--primary);color:white}
+.eco{background:linear-gradient(135deg,var(--accent),var(--cream));}.eco-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.eco-stat{text-align:center;background:color-mix(in srgb,var(--surface) 75%,transparent);padding:16px;border-radius:16px}.eco-stat b{font-size:25px;display:block}
+footer{background:var(--surface);border-top:1px solid color-mix(in srgb,var(--text) 8%,transparent);padding:30px 20px;color:var(--muted)}.footer-inner{max-width:1200px;margin:auto;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.footer-title{font-weight:900;color:var(--text)}
+.modal-back{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;place-items:center;padding:20px;z-index:100}.modal-back.open{display:grid}.modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--surface);border-radius:26px;padding:23px;box-shadow:0 25px 70px rgba(0,0,0,.25)}.modal-head{display:flex;justify-content:space-between;align-items:center}.close{width:38px;height:38px;border-radius:12px;background:var(--surface2);color:var(--text)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin:8px 0}.field label{display:block;font-size:12px;font-weight:800;margin-bottom:5px}.full{grid-column:1/-1}
+.toast{position:fixed;right:18px;bottom:18px;background:var(--text);color:var(--bg);padding:13px 16px;border-radius:14px;z-index:200;transform:translateY(120px);transition:.3s}.toast.show{transform:none}
+.reveal{opacity:0;transform:translateY(16px);transition:.65s}.reveal.visible{opacity:1;transform:none}
+@media(max-width:900px){.nav-links{display:none}.menu-btn{display:block}.nav-links.mobile-open{display:flex;position:absolute;top:68px;left:12px;right:12px;background:var(--surface);padding:12px;border-radius:18px;box-shadow:var(--shadow);flex-direction:column;align-items:stretch}.nav-links.mobile-open a{text-align:center}.hero{grid-template-columns:1fr;padding-top:35px}.plant-art{min-height:300px}.grid,.library-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){main{padding:0 14px 45px}.grid,.grid2,.library-grid{grid-template-columns:1fr}.hero{min-height:auto}.hero h1{letter-spacing:-2px}.hero-stats{display:grid;grid-template-columns:1fr 1fr}.section{padding:38px 0}.section-head{align-items:start;flex-direction:column}.calendar{gap:4px}.day{min-height:70px;padding:5px}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.eco-stats{grid-template-columns:1fr}.xp-box{grid-template-columns:80px 1fr}.level-badge{width:75px;height:75px;font-size:34px}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner">
+<a class="logo" href="#home"><span class="logo-icon">🌱</span> Plant Care</a>
+<div class="nav-links" id="navLinks">
+<a href="#home">🌱 Home</a><a href="#my-plants">🪴 My Plants</a><a href="#care">💧 Plant Care</a><a href="#check">☀️ Plant Check</a><a href="#schedule">📅 Care Schedule</a><a href="#library">📚 Plant Library</a><a href="#progress">🏆 My Progress</a>
+</div>
+<button class="theme-btn" id="themeBtn" title="Toggle dark mode">🌙</button><button class="menu-btn" id="menuBtn">☰</button>
+</div></nav>
+
+<main>
+<section class="hero" id="home">
+<div class="reveal"><span class="eyebrow">🌿 Your personal digital garden</span><h1>Grow Better.<br>Care Smarter. 🌱</h1><p>Learn how to understand, care for, and grow your plants with simple interactive tools.</p>
+<div class="actions"><button class="btn primary" onclick="scrollToId('my-plants')">🌱 Start Caring</button><button class="btn secondary" onclick="scrollToId('library')">📚 Explore Plants</button></div>
+<div class="hero-stats"><div class="stat"><b id="plantsAdded">0</b><span>🌿 Plants Added</span></div><div class="stat"><b id="wateringCount">0</b><span>💧 Waterings</span></div><div class="stat"><b id="tasksCount">0</b><span>🌱 Tasks Completed</span></div></div></div>
+<div class="plant-art reveal"><span class="sun">☀️</span><span class="cloud">☁️</span><span class="leaf l1">🍃</span><span class="leaf l2">🌿</span><span class="leaf l3">🍃</span><div class="pot">🪴</div></div>
+</section>
+
+<section class="section reveal" id="my-plants"><div class="section-head"><div><h2>My Little Garden 🪴</h2><p>Your plants, your little daily wins.</p></div><button class="btn primary" onclick="openPlantModal()">+ Add New Plant</button></div><div id="plantGrid" class="grid"></div></section>
+
+<section class="section reveal" id="care"><div class="section-head"><div><h2>Plant Care 💧</h2><p>Simple tools to help you make better care decisions.</p></div></div>
+<div class="grid2">
+<div class="card" id="check"><span class="feature-icon">🌿</span><h3>Plant Check-Up</h3><p class="muted">Answer a few questions and get a simple care suggestion.</p><div id="checkQuestions"></div><button class="btn primary" onclick="runCheck()">Check My Plant 🌱</button><div id="checkResult" class="result"></div></div>
+<div class="card"><span class="feature-icon">💧</span><h3>Watering Calculator</h3><p class="muted">A general guide — plant needs can vary.</p>
+<div class="field"><label>Plant type</label><select class="select" id="waterPlant"><option>General Houseplant</option><option>Cactus</option><option>Snake Plant</option><option>Monstera</option><option>Peace Lily</option><option>Pothos</option></select></div>
+<div class="form-grid"><div class="field"><label>Pot size</label><select class="select" id="potSize"><option>Small</option><option>Medium</option><option>Large</option></select></div><div class="field"><label>Soil</label><select class="select" id="soil"><option>Moist</option><option>Dry</option><option>Very Dry</option></select></div><div class="field"><label>Temperature</label><select class="select" id="temp"><option>Cool</option><option>Normal</option><option>Warm</option></select></div><div class="field"><label>Light</label><select class="select" id="waterLight"><option>Low</option><option>Medium</option><option>Bright</option></select></div></div>
+<button class="btn primary" onclick="calculateWater()">Calculate 💦</button><div id="waterResult" class="result"></div></div>
+</div></section>
+
+<section class="section reveal"><div class="grid2">
+<div class="card" id="light"><span class="feature-icon">☀️</span><h3>Is Your Plant Getting Enough Light?</h3><p class="muted">Choose the light level around your plant.</p><div class="sun-display medium" id="sunDisplay">☀️</div><div class="choice-row"><button class="choice" data-light="Low" onclick="setLight('Low')">🌑 Low Light</button><button class="choice active" data-light="Medium" onclick="setLight('Medium')">🌤️ Medium Light</button><button class="choice" data-light="Bright" onclick="setLight('Bright')">☀️ Bright Light</button></div><div id="lightResult" class="result show"><b>🌤️ Medium light</b><br>Good options include Pothos, Snake Plant, and Peace Lily. Keep plants near suitable filtered light and watch for signs of stress.</div></div>
+<div class="card challenge"><span class="feature-icon">🌱</span><h3>Today's Plant Challenge</h3><p id="challengeText">Check your plant soil.</p><button class="btn primary" id="challengeBtn" onclick="completeChallenge()">Complete Challenge +15 XP</button><div id="challengeStatus" class="muted"></div></div>
+</div></section>
+
+<section class="section reveal" id="library"><div class="section-head"><div><h2>Plant Library 📚</h2><p>Explore plants and discover what they need.</p></div></div><div class="toolbar"><input class="input search" id="plantSearch" placeholder="🔍 Search plant..." oninput="renderLibrary()"><select class="select" id="plantFilter" style="max-width:180px" onchange="renderLibrary()"><option value="all">All plants</option><option>Indoor</option><option>Outdoor</option><option>Low Light</option><option>Easy Care</option><option>Pet Friendly</option></select></div><div id="libraryGrid" class="grid library-grid"></div></section>
+
+<section class="section reveal" id="schedule"><div class="section-head"><div><h2>Care Schedule 📅</h2><p>Tap a task to mark it complete.</p></div><button class="btn primary" onclick="addTask()">+ Add Task</button></div><div class="card"><div id="calendar" class="calendar"></div></div></section>
+
+<section class="section reveal"><div class="section-head"><div><h2>Watch Your Plant Grow 🌿</h2><p>Record growth and see your little timeline.</p></div></div><div class="grid2"><div class="card"><div class="timeline" id="timeline"><button class="active">🌱 Day 1</button><button>🌿 Week 2</button><button>🍃 Week 4</button><button>🌳 Month 2</button></div><canvas id="growthChart" width="700" height="260"></canvas></div>
+<div class="card"><h3>Add Growth Record</h3><div class="form-grid"><div class="field"><label>Date</label><input class="input" type="date" id="growthDate"></div><div class="field"><label>Height (cm)</label><input class="input" type="number" id="growthHeight" min="0"></div><div class="field"><label>Leaves</label><input class="input" type="number" id="growthLeaves" min="0"></div><div class="field"><label>Condition</label><select class="select" id="growthCondition"><option>Healthy</option><option>Needs attention</option><option>Recovering</option></select></div><div class="field full"><label>Note</label><textarea class="textarea" id="growthNote" rows="3" placeholder="What did you notice?"></textarea></div></div><button class="btn primary" onclick="addGrowth()">Save Growth 🌱</button></div></div></section>
+
+<section class="section reveal" id="progress"><div class="section-head"><div><h2>My Progress 🏆</h2><p>Every small action counts.</p></div></div><div class="grid2"><div class="card"><div class="xp-box"><div class="level-badge" id="levelIcon">🌱</div><div><div id="levelName" class="xp-big">Seedling</div><div id="xpText" class="muted">0 / 100 XP</div><div class="bar"><i id="xpBar" style="width:0%"></i></div></div></div></div>
+<div class="card"><h3>Achievements</h3><div class="badges" id="badges"></div></div></div></section>
+
+<section class="section reveal"><div class="grid2"><div class="card"><span class="feature-icon">🧠</span><h3>Plant Quiz</h3><p id="quizQuestion" class="muted"></p><div id="quizOptions"></div><div id="quizFeedback" class="result"></div><button class="btn secondary" onclick="nextQuiz()" id="nextQuizBtn" style="display:none">Next Question →</button></div>
+<div class="card"><span class="feature-icon">💡</span><h3>Quick Plant Tips</h3><div id="tips"></div></div></div></section>
+
+<section class="section reveal"><div class="grid2"><div class="card"><span class="feature-icon">🌱</span><h3>Plant Buddy</h3><p class="muted">Pick a concern to get safe, general guidance.</p><div class="choice-row" id="buddyChoices"></div><div class="assistant" id="assistant"></div></div>
+<div class="card eco"><span class="feature-icon">🌎</span><h3>Grow Green, Live Green</h3><p class="muted">Tiny eco-friendly habits can make plant care more sustainable.</p><ul class="muted"><li>💧 Water thoughtfully and check soil first.</li><li>♻️ Reuse clean pots and containers.</li><li>🌱 Try composting suitable organic scraps.</li><li>🪴 Choose plants suited to your environment.</li></ul><div class="eco-stats"><div class="eco-stat"><b id="waterSaved">0</b><span>🌎 Water Saved</span></div><div class="eco-stat"><b id="ecoActions">0</b><span>♻️ Eco Actions</span></div><div class="eco-stat"><b id="ecoPlants">0</b><span>🌱 Plants Cared For</span></div></div></div></div></section>
+</main>
+
+<footer><div class="footer-inner"><div><div class="footer-title">🌱 Plant Care</div><div>Small care today, beautiful growth tomorrow.</div></div><div>Home · My Plants · Plant Library · Care Schedule · Progress</div><div>Made with 🌱 for plant lovers.</div></div></footer>
+
+<div class="modal-back" id="plantModal"><div class="modal"><div class="modal-head"><h2 id="modalTitle">Add New Plant</h2><button class="close" onclick="closeModal()">✕</button></div><div class="form-grid">
+<div class="field"><label>Name</label><input class="input" id="plantName" placeholder="e.g. Mimo"></div>
+<div class="field"><label>Type</label><select class="select" id="plantType"><option>Monstera</option><option>Cactus</option><option>Snake Plant</option><option>Pothos</option><option>Peace Lily</option><option>Aloe Vera</option><option>Spider Plant</option><option>Rose</option><option>Other</option></select></div>
+<div class="field"><label>Location</label><input class="input" id="plantLocation" placeholder="Bedroom window"></div>
+<div class="field"><label>Watering frequency</label><select class="select" id="plantFreq"><option value="2">Every 2 days</option><option value="4" selected>Every 4 days</option><option value="7">Every 7 days</option><option value="10">Every 10 days</option><option value="14">Every 14 days</option></select></div>
+<div class="field"><label>Light level</label><select class="select" id="plantLight"><option>Low</option><option selected>Medium</option><option>Bright</option></select></div>
+<div class="field full"><label>Personal note</label><textarea class="textarea" id="plantNote" rows="3" placeholder="A little note about your plant..."></textarea></div>
+</div><button class="btn primary" style="width:100%;margin-top:10px" onclick="savePlant()">Save Plant 🌱</button></div></div>
+<div class="modal-back" id="detailModal"><div class="modal"><div class="modal-head"><h2 id="detailTitle">Plant</h2><button class="close" onclick="closeDetail()">✕</button></div><div id="detailBody"></div></div></div>
+<div class="toast" id="toast">Saved 🌱</div>
+
+<script>
+const library=[
+{name:"Monstera",emoji:"🌿",difficulty:"Easy",light:"Medium",water:"Moderate",beginner:true,tags:["Indoor","Easy Care","Pet Friendly"],desc:"A tropical favorite. Let the top layer of soil dry a little before watering and give it bright, indirect light."},
+{name:"Cactus",emoji:"🌵",difficulty:"Easy",light:"Bright",water:"Low",beginner:true,tags:["Indoor","Outdoor","Easy Care"],desc:"Stores water in its tissues. Use a well-draining mix and avoid keeping the soil constantly wet."},
+{name:"Snake Plant",emoji:"🌱",difficulty:"Very Easy",light:"Low–Bright",water:"Low",beginner:true,tags:["Indoor","Low Light","Easy Care"],desc:"Tolerates lower light and prefers drying between waterings. Avoid soggy soil."},
+{name:"Pothos",emoji:"🍃",difficulty:"Easy",light:"Low–Medium",water:"Moderate",beginner:true,tags:["Indoor","Low Light","Easy Care"],desc:"Adaptable and beginner-friendly. Keep it in suitable indirect light and water when the soil begins to dry."},
+{name:"Peace Lily",emoji:"🌸",difficulty:"Medium",light:"Medium",water:"Moderate",beginner:true,tags:["Indoor","Low Light","Pet Friendly"],desc:"Likes evenly moist soil and indirect light. Avoid letting it sit in standing water."},
+{name:"Aloe Vera",emoji:"🌿",difficulty:"Easy",light:"Bright",water:"Low",beginner:true,tags:["Indoor","Outdoor","Easy Care"],desc:"Prefers bright light and drying between waterings. A pot with drainage is important."},
+{name:"Spider Plant",emoji:"🌱",difficulty:"Easy",light:"Medium",water:"Moderate",beginner:true,tags:["Indoor","Easy Care","Pet Friendly"],desc:"A resilient plant that likes bright, indirect light and moderately moist soil."},
+{name:"Rose",emoji:"🌺",difficulty:"Medium",light:"Bright",water:"Moderate",beginner:false,tags:["Outdoor"],desc:"Usually needs plenty of light and airflow. Water deeply when needed while avoiding constantly soggy soil."}
+];
+const tips=[
+["💧","Watering Tips","Check the soil before watering. A schedule is a reminder, not a rule."],
+["☀️","Light Tips","Bright indirect light works for many houseplants; avoid sudden harsh exposure."],
+["🌱","Soil Tips","Good drainage helps reduce the chance of waterlogged roots."],
+["🪴","Pot Tips","Choose a pot with drainage holes and size up gradually when repotting."],
+["✂️","Pruning Tips","Use clean tools and remove damaged growth carefully."],
+["🐛","Pest Prevention","Check leaf undersides regularly and isolate a plant if you notice suspicious pests."]
+];
+const quiz=[
+["Which plant usually needs less frequent watering?",["Cactus","Peace Lily","Fern","Basil"],0,"Cacti generally store water and often need less frequent watering."],
+["Which is a useful first check when leaves look yellow?",["Soil moisture","Paint the leaves","Add lots of water immediately","Move it into darkness"],0,"Checking soil moisture is a sensible first step; watering needs vary by plant and conditions."],
+["Which light is usually preferred by many indoor tropical plants?",["Bright indirect","Complete darkness","Only midnight light","No light"],0,"Many tropical houseplants do well with bright, indirect light, though requirements vary."]
+];
+const challenges=["Check your plant soil.","Rotate your plant.","Clean dusty leaves.","Check sunlight.","Learn one new plant fact."];
+const state=JSON.parse(localStorage.getItem("plantCareState")||"null")||{plants:[],xp:0,waterings:0,tasks:0,quizScore:0,quizDone:0,eco:0,growth:[],tasksList:[],challengeDay:new Date().toDateString(),challengeDone:false,theme:"light"};
+if(state.challengeDay!==new Date().toDateString()){state.challengeDay=new Date().toDateString();state.challengeDone=false}
+document.documentElement.dataset.theme=state.theme==="dark"?"dark":"light";
+
+function save(){localStorage.setItem("plantCareState",JSON.stringify(state));updateStats();renderPlants();renderProgress();renderCalendar();drawChart();renderEco()}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1900)}
+function addXP(n,reason){state.xp+=n;toast(`+${n} XP · ${reason}`);save()}
+function updateStats(){document.getElementById("plantsAdded").textContent=state.plants.length;document.getElementById("wateringCount").textContent=state.waterings;document.getElementById("tasksCount").textContent=state.tasks}
+function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
+document.getElementById("themeBtn").onclick=()=>{state.theme=state.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=state.theme==="dark"?"dark":"light";document.getElementById("themeBtn").textContent=state.theme==="dark"?"☀️":"🌙";save()}
+document.getElementById("menuBtn").onclick=()=>document.getElementById("navLinks").classList.toggle("mobile-open");
+document.querySelectorAll(".nav-links a").forEach(a=>a.onclick=()=>document.getElementById("navLinks").classList.remove("mobile-open"));
+
+function openPlantModal(editId=null){
+document.getElementById("plantModal").classList.add("open");document.getElementById("modalTitle").textContent=editId?"Edit Plant":"Add New Plant";
+document.getElementById("plantModal").dataset.edit=editId||"";
+const p=state.plants.find(x=>x.id==editId);
+document.getElementById("plantName").value=p?.name||"";document.getElementById("plantType").value=p?.type||"Monstera";document.getElementById("plantLocation").value=p?.location||"";document.getElementById("plantFreq").value=p?.freq||4;document.getElementById("plantLight").value=p?.light||"Medium";document.getElementById("plantNote").value=p?.note||"";
+}
+function closeModal(){document.getElementById("plantModal").classList.remove("open")}
+function savePlant(){
+const name=document.getElementById("plantName").value.trim()||"My Plant", id=document.getElementById("plantModal").dataset.edit;
+const data={name,type:document.getElementById("plantType").value,location:document.getElementById("plantLocation").value.trim()||"My room",freq:+document.getElementById("plantFreq").value,light:document.getElementById("plantLight").value,note:document.getElementById("plantNote").value.trim()};
+if(id){Object.assign(state.plants.find(p=>p.id==id),data);toast("Plant updated 🌿")}else{data.id=Date.now();data.lastWatered=null;data.health=100;state.plants.push(data);state.eco++;addXP(20,"New plant")}
+closeModal();save()
+}
+function renderPlants(){
+const g=document.getElementById("plantGrid");g.innerHTML="";
+if(!state.plants.length){g.innerHTML='<div class="card empty"><div class="big">🌱</div><h3>Your garden is waiting for its first plant! 🌱</h3><p class="muted">Start with one little plant and build your digital garden.</p><button class="btn primary" onclick="openPlantModal()">+ Add Your First Plant</button></div>';return}
+state.plants.forEach(p=>{const lib=library.find(x=>x.name===p.type);const next=p.lastWatered?new Date(p.lastWatered).getTime()+p.freq*86400000:Date.now();const nextDate=new Date(next).toLocaleDateString(undefined,{month:"short",day:"numeric"});const c=document.createElement("div");c.className="card plant-card";c.innerHTML=`<div class="plant-emoji">${lib?.emoji||"🪴"}</div><h3>${esc(p.name)}</h3><div class="health"><span>Health</span><b>${p.health}%</b></div><div class="bar"><i style="width:${p.health}%"></i></div><div class="meta"><span class="tag">💧 ${p.freq}d</span><span class="tag">☀️ ${p.light}</span><span class="tag">📅 ${nextDate}</span></div><p class="muted">${esc(p.location)}</p><div class="card-actions"><button class="small" onclick="showDetail(${p.id})">View Details</button><button class="small green" onclick="waterPlant(${p.id})">Watered 💧</button><button class="small" onclick="openPlantModal(${p.id})">Edit</button><button class="small" onclick="deletePlant(${p.id})">Delete</button></div>`;g.appendChild(c)})
+}
+function waterPlant(id){const p=state.plants.find(x=>x.id==id);p.lastWatered=new Date().toISOString();p.health=Math.min(100,p.health+4);state.waterings++;state.eco++;addXP(10,"Plant watered");save();toast("💧 Just Watered! Tiny drops of care added.");}
+function deletePlant(id){if(confirm("Delete this plant from your garden?")){state.plants=state.plants.filter(p=>p.id!=id);save();toast("Plant removed")}}
+function showDetail(id){const p=state.plants.find(x=>x.id==id), l=library.find(x=>x.name===p.type);document.getElementById("detailTitle").textContent=`${l?.emoji||"🪴"} ${p.name}`;document.getElementById("detailBody").innerHTML=`<p><b>Type:</b> ${p.type}</p><p><b>Location:</b> ${esc(p.location)}</p><p><b>Light:</b> ${p.light}</p><p><b>Watering:</b> Every ${p.freq} days</p><p><b>Note:</b> ${esc(p.note||"No note yet.")}</p><div class="result show"><b>🌱 Care reminder</b><br>${l?.desc||"Observe your plant regularly and adjust care to its response."}</div>`;document.getElementById("detailModal").classList.add("open")}
+function closeDetail(){document.getElementById("detailModal").classList.remove("open")}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+
+const qs=["Apakah daun tanaman menguning?","Apakah tanah terasa terlalu kering?","Apakah daun terlihat layu?","Apakah tanaman mendapatkan cukup cahaya?","Apakah terdapat bintik atau perubahan warna pada daun?"];
+document.getElementById("checkQuestions").innerHTML=qs.map((q,i)=>`<div class="check-q"><b>${i+1}. ${q}</b><div class="choice-row" style="margin-top:8px"><button class="choice" data-q="${i}" data-v="yes">Yes</button><button class="choice" data-q="${i}" data-v="no">No</button><button class="choice" data-q="${i}" data-v="unsure">Not Sure</button></div></div>`).join("");
+document.querySelectorAll(".choice[data-q]").forEach(b=>b.onclick=()=>{document.querySelectorAll(`.choice[data-q="${b.dataset.q}"]`).forEach(x=>x.classList.remove("active"));b.classList.add("active")});
+function runCheck(){const answers=qs.map((_,i)=>document.querySelector(`.choice[data-q="${i}"].active`)?.dataset.v||"unsure");let water=answers[1]==="yes"||answers[2]==="yes",light=answers[3]==="no",issues=(answers[0]==="yes"?1:0)+(answers[4]==="yes"?1:0);let title="🌱 Plant Condition: Good",text="Keep observing your plant and maintain consistent care.";if(water){title="💧 Your plant may need a moisture check";text="Check the soil depth appropriate for your plant before watering. Avoid watering automatically if the soil is already wet."}else if(light){title="☀️ Your plant may need better lighting";text="Try a more suitable light location or filtered light, depending on the plant's needs."}else if(issues){title="🔎 Your plant may need closer observation";text="Inspect leaves and soil, and consider environmental changes. If symptoms persist, ask a local nursery or plant specialist."}const r=document.getElementById("checkResult");r.innerHTML=`<b>${title}</b><br>${text}<br><small>Health meter: ${Math.max(35,100-(water?25:0)-(light?20:0)-issues*10)}%</small>`;r.classList.add("show");addXP(20,"Plant check")}
+function calculateWater(){const soil=document.getElementById("soil").value,plant=document.getElementById("waterPlant").value,light=document.getElementById("waterLight").value,temp=document.getElementById("temp").value;let days=4;if(plant==="Cactus"||plant==="Snake Plant")days=10;if(plant==="Peace Lily")days=3;if(soil==="Very Dry")days=Math.max(2,days-1);if(soil==="Moist")days++;if(temp==="Warm"||light==="Bright")days=Math.max(2,days-1);const r=document.getElementById("waterResult");r.innerHTML=`💦 <b>General guide</b><br>Re-check the soil in about <b>${days} day(s)</b>. A rough watering rhythm could be around every ${days} day(s), but use the soil and plant response as your main guide.<br><br>🌱 Tip: water thoroughly only when appropriate, let excess drain, and avoid keeping roots constantly soggy.`;r.classList.add("show");}
+function setLight(level){document.querySelectorAll("[data-light]").forEach(x=>x.classList.toggle("active",x.dataset.light===level));const s=document.getElementById("sunDisplay");s.className="sun-display "+level.toLowerCase();const r=document.getElementById("lightResult");const data={Low:["🌑 Low light","Snake Plant, Pothos, and some Peace Lilies may tolerate lower light. Avoid assuming every plant will thrive there."],Medium:["🌤️ Medium light","Pothos, Snake Plant, Peace Lily, and Spider Plant can be suitable depending on the exact spot."],Bright:["☀️ Bright light","Cactus, Aloe Vera, and many sun-loving plants can suit bright areas. Protect shade-loving plants from harsh direct sun."]}[level];r.innerHTML=`<b>${data[0]}</b><br>${data[1]}`;r.classList.add("show")}
+
+function renderLibrary(){const q=document.getElementById("plantSearch").value.toLowerCase(),f=document.getElementById("plantFilter").value;const arr=library.filter(p=>(p.name.toLowerCase().includes(q)||p.tags.join(" ").toLowerCase().includes(q))&&(f==="all"||p.tags.includes(f)));document.getElementById("libraryGrid").innerHTML=arr.map(p=>`<div class="card library-card" onclick="openLibrary('${p.name}')"><div class="plant-emoji">${p.emoji}</div><h3>${p.name}</h3><div class="meta"><span class="tag">${p.difficulty}</span><span class="tag">☀️ ${p.light}</span><span class="tag">💧 ${p.water}</span></div><p class="muted">${p.beginner?"🌱 Beginner Friendly":"🌿 Some experience helpful"}</p></div>`).join("")||'<div class="card empty"><div class="big">🔎</div><h3>No plants found</h3><p class="muted">Try another search or filter.</p></div>'}
+function openLibrary(name){const p=library.find(x=>x.name===name);document.getElementById("detailTitle").textContent=`${p.emoji} ${p.name}`;document.getElementById("detailBody").innerHTML=`<p><b>Difficulty:</b> ${p.difficulty}</p><p><b>Light:</b> ${p.light}</p><p><b>Water:</b> ${p.water}</p><p><b>Beginner friendly:</b> ${p.beginner?"Yes":"Not necessarily"}</p><div class="result show">${p.desc}</div><div class="meta">${p.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>`;document.getElementById("detailModal").classList.add("open")}
+
+function renderCalendar(){const el=document.getElementById("calendar");const now=new Date(),y=now.getFullYear(),m=now.getMonth(),first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate();let out=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(x=>`<div class="day" style="min-height:auto;text-align:center;font-weight:800;background:transparent">${x}</div>`).join("");for(let i=0;i<first;i++)out+='<div></div>';for(let d=1;d<=days;d++){const key=`${y}-${m+1}-${d}`,today=d===now.getDate();const tasks=state.tasksList.filter(t=>t.date===key);out+=`<div class="day ${today?"today":""}"><b>${d}</b>${tasks.map((t,i)=>`<span class="task ${t.done?"done":""}" onclick="toggleTask(${state.tasksList.indexOf(t)})">${t.icon} ${esc(t.name)}</span>`).join("")}</div>`}el.innerHTML=out}
+function addTask(){const name=prompt("Task name (e.g. Watering)");if(!name)return;const now=new Date();const date=`${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;const icons={"watering":"💧","fertilizing":"🌱","pruning":"✂️","light check":"☀️","repotting":"🪴"};const key=name.toLowerCase();state.tasksList.push({name,date,icon:Object.keys(icons).find(k=>key.includes(k))?icons[Object.keys(icons).find(k=>key.includes(k))]:"🌿",done:false});save();toast("Task added 📅")}
+function toggleTask(i){if(!state.tasksList[i].done){state.tasksList[i].done=true;state.tasks++;addXP(15,"Task completed")}else state.tasksList[i].done=false;save()}
+
+function addGrowth(){const date=document.getElementById("growthDate").value||new Date().toISOString().slice(0,10),height=+document.getElementById("growthHeight").value,leaves=+document.getElementById("growthLeaves").value;if(!height&&!leaves){toast("Add height or leaves first 🌱");return}state.growth.push({date,height,leaves,condition:document.getElementById("growthCondition").value,note:document.getElementById("growthNote").value});addXP(10,"Growth record");save()}
+function drawChart(){const c=document.getElementById("growthChart");if(!c)return;const ctx=c.getContext("2d"),w=c.width=c.clientWidth*2,h=c.height=260*2;ctx.clearRect(0,0,w,h);ctx.scale(2,2);const W=c.clientWidth,H=260;ctx.font="12px system-ui";ctx.fillStyle=getComputedStyle(document.body).getPropertyValue("--muted");const data=state.growth.slice(-8);if(!data.length){ctx.fillText("Add growth records to see your chart 🌱",20,40);return}const max=Math.max(...data.map(d=>d.height||0),10);ctx.beginPath();data.forEach((d,i)=>{const x=30+i*(W-60)/Math.max(1,data.length-1),y=H-35-(d.height||0)/max*(H-75);i?ctx.lineTo(x,y):ctx.moveTo(x,y);ctx.fillText(d.height+"cm",x-12,y-10)});ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue("--primary");ctx.lineWidth=3;ctx.stroke();ctx.fillStyle=getComputedStyle(document.body).getPropertyValue("--text");data.forEach((d,i)=>{const x=30+i*(W-60)/Math.max(1,data.length-1);const y=H-35-(d.height||0)/max*(H-75);ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();ctx.fillText(d.date.slice(5),x-13,H-15)})}
+
+function levelInfo(){const levels=[["Seedling","🌱",100],["Sprout","🌿",250],["Young Plant","🍃",500],["Plant Keeper","🌳",850],["Master Gardener","🌲",1300]];let idx=0;for(let i=0;i<levels.length;i++)if(state.xp>=levels[i][2])idx=i;return {idx,levels}}
+function renderProgress(){const {idx,levels}=levelInfo(),cur=levels[idx],next=levels[idx+1];document.getElementById("levelName").textContent=cur[0];document.getElementById("levelIcon").textContent=cur[1];const base=cur[2],goal=next?next[2]:cur[2];const pct=next?Math.min(100,(state.xp-base)/(goal-base)*100):100;document.getElementById("xpText").textContent=next?`${state.xp-base} / ${goal-base} XP to ${next[0]}`:"Max level reached 🌲";document.getElementById("xpBar").style.width=pct+"%";const achieved=[["💧 First Watering",state.waterings>=1],["🌱 First Plant",state.plants.length>=1],["☀️ Light Expert",state.xp>=100],["📚 Plant Explorer",state.quizDone>=1],["🪴 Plant Keeper",state.tasks>=3],["🌳 Green Thumb",state.xp>=500]];document.getElementById("badges").innerHTML=achieved.map(x=>`<span class="badge ${x[1]?"":"locked"}">${x[0]} ${x[1]?"✓":"🔒"}</span>`).join("")}
+function completeChallenge(){if(state.challengeDone)return;state.challengeDone=true;addXP(15,"Daily challenge");document.getElementById("challengeBtn").disabled=true;document.getElementById("challengeStatus").textContent="✅ Challenge complete — see you tomorrow!"}
+function renderChallenge(){const idx=new Date().getDate()%challenges.length;document.getElementById("challengeText").textContent=challenges[idx];if(state.challengeDone){document.getElementById("challengeBtn").disabled=true;document.getElementById("challengeStatus").textContent="✅ Challenge complete — see you tomorrow!"}}
+let quizIndex=0;
+function renderQuiz(){const q=quiz[quizIndex];document.getElementById("quizQuestion").textContent=q[0];document.getElementById("quizOptions").innerHTML=q[1].map((o,i)=>`<button class="quiz-option" onclick="answerQuiz(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("");document.getElementById("quizFeedback").classList.remove("show");document.getElementById("nextQuizBtn").style.display="none"}
+function answerQuiz(i){const q=quiz[quizIndex],r=document.getElementById("quizFeedback");document.querySelectorAll(".quiz-option").forEach(b=>b.disabled=true);if(i===q[2]){state.quizScore++;r.innerHTML="✅ <b>Correct!</b><br>"+q[3];addXP(5,"Quiz answer")}else{r.innerHTML="❌ <b>Not quite!</b><br>"+q[3]}state.quizDone++;r.classList.add("show");document.getElementById("nextQuizBtn").style.display="inline-block";save()}
+function nextQuiz(){quizIndex=(quizIndex+1)%quiz.length;renderQuiz()}
+function renderTips(){document.getElementById("tips").innerHTML=tips.map((t,i)=>`<div class="tip card" style="box-shadow:none;padding:13px;margin:7px 0" onclick="this.classList.toggle('open')"><b>${t[0]} ${t[1]}</b><div class="tip-detail">${t[2]}</div></div>`).join("")}
+const buddy=[["Leaves are yellow","Possible causes can include watering issues, light changes, or normal older leaves. Check soil moisture and the plant's light conditions before changing care."],["Leaves are drooping","You may want to check soil moisture, recent temperature changes, and whether the plant is getting suitable light."],["I see spots","Look closely at the leaves and check for pests, moisture staying on foliage, or recent environmental changes. Avoid making a definite disease diagnosis from symptoms alone."],["How often should I water?","There is no universal schedule. Check the plant's soil and species needs, then adjust for pot size, light, temperature, and season."]];
+function renderBuddy(){const box=document.getElementById("buddyChoices");box.innerHTML=buddy.map((b,i)=>`<button class="choice" onclick="buddyAnswer(${i})">${b[0]}</button>`).join("")}
+function buddyAnswer(i){const a=document.getElementById("assistant");a.innerHTML+=`<div class="bubble user">${buddy[i][0]}</div><div class="bubble bot">🌱 <b>Plant Buddy:</b> ${buddy[i][1]}</div>`}
+function renderEco(){document.getElementById("waterSaved").textContent=state.waterings*50+" ml";document.getElementById("ecoActions").textContent=state.eco;document.getElementById("ecoPlants").textContent=state.plants.length}
+
+const observer=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add("visible")}),{threshold:.08});document.querySelectorAll(".reveal").forEach(x=>observer.observe(x));
+document.getElementById("themeBtn").textContent=state.theme==="dark"?"☀️":"🌙";
+renderChallenge();renderQuiz();renderTips();renderBuddy();renderLibrary();renderPlants();renderProgress();renderCalendar();renderEco();updateStats();drawChart();
+window.addEventListener("resize",drawChart);
+document.getElementById("growthDate").value=new Date().toISOString().slice(0,10);
+</script>
+</body>
+</html>
